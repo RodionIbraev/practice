@@ -64,7 +64,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-
+    @auth_required
     def get(self, request):
         response = Response()
         response.delete_cookie('jwt_token')
