@@ -18,7 +18,7 @@ class User(AbstractUser, SoftDeleteModel):
     REQUIRED_FIELDS = []
 
     def __str__(self):
-        return f"{self.name} {self.second_name}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = "Users"
