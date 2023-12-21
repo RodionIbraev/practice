@@ -1,5 +1,6 @@
 import datetime
 import jwt
+from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,15 +28,34 @@ def auth_required(view_func):
 
 
 class RegisterView(APIView):
-
+    """
+    Регистрация пользователей
+    """
     def post(self, request):
         serializer = UserSerializer(data=request.data)
+        # Проверка пароля на сложность
+        try:
+            validate_password(request.data['password'])
+        except Exception as password_error:
+            error_array = []
+            for item in password_error:
+                error_array.append(item)
+            response = Response()
+            response.data = {
+                'Status': False,
+                'Errors': {'password': error_array}
+            }
+            return response
+
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
 
 
 class LoginView(APIView):
+    """
+    Аунтификация пользователей
+    """
     def post(self, request):
         phone_number = request.data['phone_number']
         password = request.data['password']
@@ -64,6 +84,9 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """
+    Выход пользователей
+    """
     @auth_required
     def get(self, request):
         response = Response()
