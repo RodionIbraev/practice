@@ -5,7 +5,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import User, Agreement
+from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan
 from .serializers import UserSerializer
 
 from functools import wraps
@@ -108,6 +108,24 @@ class LogoutView(APIView):
         return response
 
 
+class TariffPlansDetailsView(APIView):
+    """
+    Просмотр тарифов
+    """
+
+    def get(self, request):
+        mobile_tariff_plans = [mobile_tariff_plan for mobile_tariff_plan in MobileTariffPlan.objects.all().values()]
+        home_tariff_plans = [home_tariff_plans for home_tariff_plans in HomeTariffPlan.objects.all().values()]
+        combo_tariff_plans = [combo_tariff_plans for combo_tariff_plans in ComboTariffPlan.objects.all().values()]
+        response = Response()
+        response.data = {
+            "mobile_tariff_plans": mobile_tariff_plans,
+            "home_tariff_plans": home_tariff_plans,
+            "combo_tariff_plans": combo_tariff_plans,
+        }
+        return response
+
+
 class AccountDetailsView(APIView):
     """
     Личный кабинет пользователя
@@ -117,8 +135,7 @@ class AccountDetailsView(APIView):
     def get(self, request):
         user = User.objects.get(id=get_user(request).id)
         user_serializer = UserSerializer(user)
-        user_agreements = Agreement.objects.filter(user=user.id)
-        user_agreements = [agreement for agreement in user_agreements.values()]
+        user_agreements = [agreement for agreement in Agreement.objects.filter(user=user.id).values()]
         response = Response()
         response.data = {
             "user": user_serializer.data,

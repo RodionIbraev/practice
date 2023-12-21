@@ -31,7 +31,7 @@ class MobileTariffPlan(SoftDeleteModel):
     minutes = models.CharField(max_length=128, verbose_name="Минуты")
     sms = models.CharField(max_length=128, verbose_name="Сообщения")
     mobile_internet = models.CharField(max_length=128, verbose_name="Мобильный интернет")
-    price = models.FloatField(verbose_name="Стоимость")
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Стоимость")
 
     def __str__(self):
         return f"{self.name}"
@@ -45,8 +45,8 @@ class MobileTariffPlan(SoftDeleteModel):
 class HomeTariffPlan(SoftDeleteModel):
     name = models.CharField(max_length=128, verbose_name="Название")
     tv_channels = models.CharField(max_length=128, verbose_name="ТВ каналы")
-    home_internet = models.CharField(max_length=128, verbose_name="Мобильный интернет")
-    price = models.FloatField(verbose_name="Стоимость")
+    home_internet = models.CharField(max_length=128, verbose_name="Домашний интернет")
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Стоимость")
 
     def __str__(self):
         return f"{self.name}"
@@ -61,9 +61,9 @@ class ComboTariffPlan(SoftDeleteModel):
     name = models.CharField(max_length=128, verbose_name="Название")
     mobile_tariff_plan = models.ForeignKey(MobileTariffPlan, verbose_name="Мобильный тариф",
                                            on_delete=models.CASCADE, null=True, blank=True)
-    home_tariff_plan = models.ForeignKey(HomeTariffPlan, verbose_name="Мобильный тариф",
+    home_tariff_plan = models.ForeignKey(HomeTariffPlan, verbose_name="Домашний тариф",
                                          on_delete=models.CASCADE, null=True, blank=True)
-    price = models.FloatField(verbose_name="Стоимость")
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Стоимость")
 
     def __str__(self):
         return f"{self.name}"
