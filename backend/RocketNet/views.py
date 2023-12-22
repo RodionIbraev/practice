@@ -30,7 +30,7 @@ def auth_required(view_func):
 def get_user(request):
     token = request.COOKIES.get("jwt_token")
     payload = jwt.decode(token, "secret", algorithms=["HS256"])
-    user = User.objects.filter(id=payload["id"])
+    user = User.objects.get(id=payload["id"])
     return user
 
 

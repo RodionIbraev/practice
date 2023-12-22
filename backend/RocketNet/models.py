@@ -21,7 +21,7 @@ class User(AbstractUser, SoftDeleteModel):
         return f"{self.first_name} {self.last_name}"
 
     class Meta:
-        verbose_name = "Users"
+        verbose_name = "Пользователи"
         verbose_name_plural = "Пользователи"
         ordering = ("first_name",)
 
@@ -37,7 +37,7 @@ class MobileTariffPlan(SoftDeleteModel):
         return f"{self.name}"
 
     class Meta:
-        verbose_name = "MobileTariffPlans"
+        verbose_name = "Мобильные тарифные планы"
         verbose_name_plural = "Мобильные тарифные планы"
         ordering = ("-price",)
 
@@ -52,7 +52,7 @@ class HomeTariffPlan(SoftDeleteModel):
         return f"{self.name}"
 
     class Meta:
-        verbose_name = "HomeTariffPlans"
+        verbose_name = "Домашние тарифные планы"
         verbose_name_plural = "Домашние тарифные планы"
         ordering = ("-price",)
 
@@ -69,8 +69,8 @@ class ComboTariffPlan(SoftDeleteModel):
         return f"{self.name}"
 
     class Meta:
-        verbose_name = "ComboTariffPlans"
-        verbose_name_plural = "Комбо тарифные планы"
+        verbose_name = "Комбо-тарифные планы"
+        verbose_name_plural = "Комбо-тарифные планы"
         ordering = ("-price",)
 
 
@@ -85,7 +85,10 @@ class Agreement(SoftDeleteModel):
     state = models.CharField(verbose_name='Статус', choices=STATE_CHOICES, max_length=15)
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата заключения договора")
 
+    def __str__(self):
+        return f"{self.state} договор с {self.user}"
+
     class Meta:
-        verbose_name = "Agreements"
+        verbose_name = "Договоры"
         verbose_name_plural = "Договоры"
         ordering = ("user",)
