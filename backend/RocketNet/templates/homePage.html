@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/images/logo.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <title>RocketNet</title>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="navbar">
+                <h1>Rocket<span style="color: var(--pink-color);">Net</span></h1>
+                    <h2><a href="#tarif">Пакеты услуг</a></h2>
+                    <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
+                    <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
+            </div>
+        </div>    
+    </header>
+
+    <div class="container">
+        <div class="info">
+        <div class="info-1">
+            <h3>Связь взлетает на новый уровень с RocketNet!</h3>
+        </div>
+        <div class="info-2">
+            <h2>доставляем скорость, надежность и мгновенное соединение, чтобы ваше общение было настоящим полетом!</h2>
+        </div>
+        </div>
+    </div>
+
+    <div class="rocket-container">
+    <div class="rocket">
+        <img src="static/images/rocket.svg" alt="rocket">
+    </div>
+
+    <div class="container-2">
+        <p style="text-align: center;">Почему именно мы?</p>
+        <div class="we">
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <p style="padding-top: 75px;">БЫСТРЫЙ</p>
+                    </div>
+                    <div class="card-back">
+                        <p style="color: var(--white-color); padding-top: 50px;">Мигом доходите до цели!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <p style="padding-top: 75px;">НАДЁЖНЫЙ</p>
+                    </div>
+                    <div class="card-back">
+                        <p style="color: var(--white-color); padding-top: 50px;">С безупречной стабильностью!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <p style="padding-top: 75px;">МГНОВЕННЫЙ</p>
+                    </div>
+                    <div class="card-back">
+                        <p style="color: var(--white-color);">Сразу вовлекайтесь в активное общение!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center;" id="tarif">Найдите идеальный тарифный план для себя</p>
+        <div class="tarif-icons">
+            <div class="icon-box" id="btn-phone" tabindex="0">   
+                <i class="ri-phone-line"></i>
+            </div>
+            <div class="icon-box" id="btn-home" tabindex="0">
+                <i class="ri-home-3-line"></i>
+            </div>
+            <div class="icon-box" id="btn-combo" style="width: 230px;" tabindex="0">
+                <i class="ri-phone-line"></i>
+                <i class="ri-home-3-line"></i>
+            </div>
+        </div>
+
+        <div class="tarif phone" id="phone">
+            <p>Мобильная связь</p>
+            <div class="tarifs phone-tarif">
+                <div class="name-cost">
+                    <h4>Наименование тарифа</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">Цена&#8381;</h5>
+                </div>
+                <div class="phone-plan">
+                    <i class="ri-global-line"></i> <h5>ГБ</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="tarif home" id="home" style="display: none;">
+            <p>Домашний интернет</p>
+            <div class="tarifs home-tarif">
+
+            </div>
+        </div>
+
+        <div class="tarif combo" id="combo" style="display: none;">
+            <p>Комбо-тарифы</p>
+            <div class="tarifs combo-tarif">
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="popup" id="popup-1">
+        <div class="overlay"></div>
+        <div class="content">
+            <div class="close-btn" onclick="togglePopupReg()">&times;</div>
+            <p style="color: var(--pink-color); font-weight: 700;">РЕГИСТРАЦИЯ</p>
+            <form id="registration-form" action="/register/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="first_name">Имя</label>
+                  <br>
+                  <input type="text" id="first_name" name="first_name" placeholder="Введите имя" required />
+                </div>
+                <div class="form-group">
+                  <label for="last_name">Фамилия</label>
+                  <br>
+                  <input type="text" id="last_name" name="last_name" placeholder="Введите фамилию" required />
+                </div>
+                <div class="form-group">
+                  <label for="phone_number">Номер телефона</label>
+                  <br>
+                  <input type="text" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                </div>
+                <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <br>
+                  <input type="password" id="password" name="password" placeholder="Введите пароль" required />
+                </div>
+                <button type="submit" class="btn-rl">Зарегистрироваться</button>
+              </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup" id="popup-2">
+        <div class="overlay"></div>
+        <div class="content" style="height: 420px;">
+            <div class="close-btn" onclick="togglePopupLog()">&times;</div>
+            <p style="color: var(--pink-color); font-weight: 700;">АВТОРИЗАЦИЯ</p>
+            <form id="registration-form" action="/login/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="phone_number">Номер телефона</label>
+                  <br>
+                  <input type="text" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                </div>
+                <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <br>
+                  <input type="password" id="password" name="password" placeholder="Введите пароль" required />
+                </div>
+                <button type="submit" class="btn-rl">Вход</button>
+              </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 «RocketNet» Все права защищены</p>
+    </footer>
+
+    <script src="static/js/main.js"></script>
+</body>
+</html>

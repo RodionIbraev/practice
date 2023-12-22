@@ -2,6 +2,7 @@ import datetime
 import jwt
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -112,6 +113,8 @@ class TariffPlansDetailsView(APIView):
     """
     Просмотр тарифов
     """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "homePage.html"
 
     def get(self, request):
         mobile_tariff_plans = [mobile_tariff_plan for mobile_tariff_plan in MobileTariffPlan.objects.all().values()]

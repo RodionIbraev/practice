@@ -22,5 +22,5 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("personal-area/", AccountDetailsView.as_view(), name="personal-area"),
-    path("home-page/", TariffPlansDetailsView.as_view(), name="home-page"),
+    path("", TariffPlansDetailsView.as_view(), name="home-page"),
 ]
