@@ -14,8 +14,13 @@
             <div class="navbar">
                 <h1>Rocket<span style="color: var(--pink-color);">Net</span></h1>
                     <h2><a href="#tarif">Пакеты услуг</a></h2>
+                    {% if user.is_authenticated %}
+                    <h2><a href="/">Личный кабинет</a></h2>
+                    <h2><a href="/logout/">Выход</a></h2>
+                    {% else %}                
                     <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
                     <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
+                    {% endif %}
             </div>
         </div>    
     </header>
@@ -73,43 +78,69 @@
 
         <p style="text-align: center;" id="tarif">Найдите идеальный тарифный план для себя</p>
         <div class="tarif-icons">
-            <div class="icon-box" id="btn-phone" tabindex="0">   
+            <button class="icon-box" id="btn-phone" tabindex="0">   
                 <i class="ri-phone-line"></i>
-            </div>
-            <div class="icon-box" id="btn-home" tabindex="0">
+            </button>
+            <button class="icon-box" id="btn-home" tabindex="0">
                 <i class="ri-home-3-line"></i>
-            </div>
-            <div class="icon-box" id="btn-combo" style="width: 230px;" tabindex="0">
+            </button>
+            <button class="icon-box" id="btn-combo" style="width: 230px;" tabindex="0">
                 <i class="ri-phone-line"></i>
                 <i class="ri-home-3-line"></i>
-            </div>
+            </button>
         </div>
 
         <div class="tarif phone" id="phone">
             <p>Мобильная связь</p>
-            <div class="tarifs phone-tarif">
+            {% for mobile_tariff_plan in mobile_tariff_plans %}
+            <div class="tarifs">
                 <div class="name-cost">
-                    <h4>Наименование тарифа</h4>
-                    <h5 style="color: var(--pink-color); font-weight: 700;">Цена&#8381;</h5>
+                    <h4>{{ mobile_tariff_plan.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ mobile_tariff_plan.price }} &#8381;/мес</h5>
                 </div>
-                <div class="phone-plan">
-                    <i class="ri-global-line"></i> <h5>ГБ</h5>
+                <div class="plans">
+                    <i class="ri-global-line"></i> <h5>{{ mobile_tariff_plan.mobile_internet }} ГБ</h5>
+                    <i class="ri-phone-line"></i> <h5>{{ mobile_tariff_plan.minutes }} МИНУТ</h5>
+                    <i class="ri-mail-line"></i> <h5>{{ mobile_tariff_plan.sms }} СМС</h5>
                 </div>
+                <button type="submit" id="oform">Оформить</button>
             </div>
+            {% endfor %}
         </div>
 
         <div class="tarif home" id="home" style="display: none;">
             <p>Домашний интернет</p>
-            <div class="tarifs home-tarif">
-
+            {% for home_tariff_plan in home_tariff_plans %}
+            <div class="tarifs">
+                <div class="name-cost">
+                    <h4>{{ home_tariff_plan.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ home_tariff_plan.price }} &#8381;/мес</h5>
+                </div>
+                <div class="plans">
+                    <i class="ri-global-line"></i> <h5>{{ home_tariff_plan.home_internet }} ГБ</h5>
+                    <i class="ri-tv-line"></i> <h5>{{ home_tariff_plan.tv_channels }} КАНАЛОВ</h5>
+                </div>
+                <button type="submit" id="oform">Оформить</button>
             </div>
+            {% endfor %}
         </div>
 
         <div class="tarif combo" id="combo" style="display: none;">
             <p>Комбо-тарифы</p>
-            <div class="tarifs combo-tarif">
-
+            {% for combo_tariff_plan in combo_tariff_plans %}
+            <div class="tarifs">
+                <div class="name-cost">
+                    <h4>{{ combo_tariff_plan.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ combo_tariff_plan.price }} &#8381;/мес</h5>
+                </div>
+                <div class="plans">
+                    <i class="ri-phone-line"></i> <h5>{{ combo_tariff_plan.mobile_tariff_plan }}</h5>
+                    <h5>+</h5>
+                    <i class="ri-tv-line"></i> <h5>{{ combo_tariff_plan.home_tariff_plan }}</h5>
+                </div>
+                <button type="submit" id="oform">Оформить</button>
             </div>
+            {% endfor %}
         </div>
     </div>
     </div>
@@ -134,7 +165,7 @@
                 <div class="form-group">
                   <label for="phone_number">Номер телефона</label>
                   <br>
-                  <input type="text" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
                 </div>
                 <div class="form-group">
                   <label for="password">Пароль</label>
@@ -157,7 +188,7 @@
                 <div class="form-group">
                   <label for="phone_number">Номер телефона</label>
                   <br>
-                  <input type="text" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
                 </div>
                 <div class="form-group">
                   <label for="password">Пароль</label>

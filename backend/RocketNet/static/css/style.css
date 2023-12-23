@@ -82,6 +82,7 @@ a:hover {
     top: 0;
     width: 100%;
     z-index: 1;
+    padding-top: 10px;
 }
 
 .navbar {
@@ -151,7 +152,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    margin-bottom: 250px;
+    margin-bottom: 150px;
 }
 
 .card {
@@ -346,6 +347,8 @@ footer {
     border-radius: 50px;
     text-align: left;
     padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
 }
 
 .name-cost {
@@ -354,5 +357,40 @@ footer {
     gap: 20px;
 }
 
+.plans {
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.plans i {
+    color: var(--white-color);
+    font-size: 50px;
+    padding-left: 30px;
+    padding-right: 10px;
+}
+
+.plans i:first-child {
+    padding-left: 0;
+}
+
+#oform {
+    background-color: transparent;
+    width: 300px;
+    height: 100px;
+    border: 5px solid var(--pink-color);
+    border-radius: 25px;
+    color: var(--pink-color);
+    font-size: 40px;
+    font-weight: 700;
+    position: relative;
+    left: 900px;
+    top: -125px;
+    cursor: pointer;
+}
+
+#oform:hover {
+    scale: 110%;
+}
 
 

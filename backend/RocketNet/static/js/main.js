@@ -1,3 +1,5 @@
+//Модальное окно
+
 function togglePopupReg() {
     document.getElementById("popup-1").classList.toggle("active");
 }
@@ -6,6 +8,8 @@ function togglePopupLog() {
     document.getElementById("popup-2").classList.toggle("active");
 };
 
+
+//Кнопки тарифов
 var btn_phone = document.getElementById("btn-phone");
 var btn_home = document.getElementById("btn-home");
 var btn_combo = document.getElementById("btn-combo");
@@ -28,4 +32,11 @@ btn_combo.addEventListener('click', ()=>{
     combo.style.display='block';
     phone.style.display='none';
     home.style.display='none';
-})
+});
+
+window.addEventListener('load', function() {
+    var button = document.getElementsByClassName('icon-box');
+    if (button.length > 0) {
+      button[0].focus();
+    }
+});
