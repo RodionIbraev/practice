@@ -14,12 +14,12 @@
             <div class="navbar">
                 <h1>Rocket<span style="color: var(--pink-color);">Net</span></h1>
                     <h2><a href="#tarif">Пакеты услуг</a></h2>
-                    {% if user.is_authenticated %}
-                    <h2><a href="/">Личный кабинет</a></h2>
-                    <h2><a href="/logout/">Выход</a></h2>
-                    {% else %}                
-                    <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
-                    <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
+                    {% if token %}
+                        <h2><a href="/personal-area/">Личный кабинет</a></h2>
+                        <h2><a href="/logout/">Выход</a></h2>
+                    {% else %}
+                        <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
+                        <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
                     {% endif %}
             </div>
         </div>    
