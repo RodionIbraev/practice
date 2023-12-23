@@ -9,9 +9,9 @@ from django_softdelete.models import SoftDeleteModel
 from .utils import add_change_balance_method, OperationType
 
 STATE_CHOICES = (
-    ('new', 'Новый'),
-    ('connected', 'Подключен'),
-    ('canceled', 'Отменен'),
+    ("new", "Новый"),
+    ("connected", "Подключен"),
+    ("canceled", "Отменен"),
 )
 
 
@@ -20,7 +20,7 @@ class User(AbstractUser, SoftDeleteModel):
     password = models.CharField(max_length=128, verbose_name="Пароль")
     username = None
 
-    USERNAME_FIELD = 'phone_number'
+    USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -40,24 +40,29 @@ class Account(models.Model):
     def deposit(cls, pk, amount):
         return add_change_balance_method(
             django_model=cls,
-            django_field='balance',
+            django_field="balance",
             pk=pk,
             amount=amount,
             operation_type=OperationType.DEPOSIT,
         )
 
     def __str__(self) -> str:
-        return f'User id: {self.user_id}'
+        return f"Баланс пользователя: {self.user}"
+    
+    class Meta:
+        verbose_name = "Баланс"
+        verbose_name_plural = "Баланс"
+        ordering = ["-user"]
 
 
 class BalanceChange(models.Model):
     class OperationType(models.TextChoices):
-        DEPOSIT = ('DT', 'DEPOSIT')
+        DEPOSIT = ("DT", "DEPOSIT")
 
     account = models.ForeignKey(
         Account,
         on_delete=models.PROTECT,
-        related_name='balance_changes',
+        related_name="balance_changes",
     )
 
     amount = models.DecimalField(verbose_name="Сумма", max_digits=10, decimal_places=2,
@@ -75,13 +80,15 @@ class BalanceChange(models.Model):
 
     def __str__(self) -> str:
         return (
-            f'Account id:  {self.account_id} '
-            f'Date time of creation: {self.created_date}'
-            f'Amount: {self.amount}'
+            f"Баланс пользователя:  {self.account} "
+            f"Время создания: {self.created_date}"
+            f"Количество: {self.amount}"
         )
 
     class Meta:
-        ordering = ['-created_date']
+        verbose_name = "Изменение баланса"
+        verbose_name_plural = "Изменение баланса"
+        ordering = ["-created_date"]
 
 
 class MobileTariffPlan(SoftDeleteModel):
@@ -141,7 +148,7 @@ class Agreement(SoftDeleteModel):
                                          on_delete=models.DO_NOTHING, null=True, blank=True)
     combo_tariff_plan = models.ForeignKey(ComboTariffPlan, verbose_name="Комбо-тариф",
                                           on_delete=models.DO_NOTHING, null=True, blank=True)
-    state = models.CharField(verbose_name='Статус', choices=STATE_CHOICES, max_length=15)
+    state = models.CharField(verbose_name="Статус", choices=STATE_CHOICES, max_length=15)
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата заключения договора")
 
     def __str__(self):

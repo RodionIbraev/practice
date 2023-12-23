@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from .models import MobileTariffPlan, User, HomeTariffPlan, ComboTariffPlan, Agreement
+from .models import MobileTariffPlan, User, HomeTariffPlan, ComboTariffPlan, Agreement, Account, BalanceChange
 
 
 @admin.register(User)
@@ -16,18 +16,28 @@ class MobileTariffPlanAdmin(admin.ModelAdmin):
 
 @admin.register(HomeTariffPlan)
 class HomeTariffPlanAdmin(admin.ModelAdmin):
-    search_fields = ("name", )
+    search_fields = ("name",)
 
 
 @admin.register(ComboTariffPlan)
 class ComboTariffPlanAdmin(admin.ModelAdmin):
-    search_fields = ("name", )
-    list_filter = ("price", )
+    search_fields = ("name",)
+    list_filter = ("price",)
 
 
 @admin.register(Agreement)
 class AgreementAdmin(admin.ModelAdmin):
-    list_filter = ("state", )
+    list_filter = ("state",)
+
+
+@admin.register(BalanceChange)
+class BalanceChangeAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    pass
 
 
 admin.site.site_header = "Администрирование RocketNet"
