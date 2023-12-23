@@ -40,3 +40,51 @@ window.addEventListener('load', function() {
       button[0].focus();
     }
 });
+
+
+// Ошибки регистрации пользователей
+const form = document.getElementById('registration-form');
+
+// Пароль
+
+const passwordInput = document.getElementById('password');
+const passwordErrorMessage = passwordInput.nextElementSibling;
+
+form.addEventListener('submit', function(event) {
+  var passwordErrorMessages = '';
+
+  if (passwordInput.value.length < 8) {
+    passwordErrorMessages += 'Пароль не может быть меньше 8 символов. ';
+  }
+
+  if (/^\d+$/.test(passwordInput.value)) {
+    passwordErrorMessages += 'Пароль не может состоять только из цифр. ';
+  }
+
+  if (passwordErrorMessages !== '') {
+    passwordErrorMessage.textContent = passwordErrorMessages.trim();
+    event.preventDefault();
+  } else {
+    passwordErrorMessage.textContent = '';
+  }
+});
+
+// Номер телефона
+
+const phoneNumberInput = document.getElementById('phone_number');
+const phoneNumberErrorMessage = phoneNumberInput.nextElementSibling;
+
+form.addEventListener('submit', function(event) {
+  var phoneNumberErrorMessages = '';
+
+  if (!/^([+]7|8)\d{10}$/.test(phoneNumberInput.value)) {
+    phoneNumberErrorMessages += 'Некорректный номер телефона.';
+  }
+
+  if (phoneNumberErrorMessages !== '') {
+    phoneNumberErrorMessage.textContent = phoneNumberErrorMessages.trim();
+    event.preventDefault();
+  } else {
+    phoneNumberErrorMessage.textContent = '';
+  }
+});

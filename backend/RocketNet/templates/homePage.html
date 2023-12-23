@@ -78,16 +78,16 @@
 
         <p style="text-align: center;" id="tarif">Найдите идеальный тарифный план для себя</p>
         <div class="tarif-icons">
-            <button class="icon-box" id="btn-phone" tabindex="0">   
+            <div class="icon-box" id="btn-phone" tabindex="0">   
                 <i class="ri-phone-line"></i>
-            </button>
-            <button class="icon-box" id="btn-home" tabindex="0">
+            </div>
+            <div class="icon-box" id="btn-home" tabindex="0">
                 <i class="ri-home-3-line"></i>
-            </button>
-            <button class="icon-box" id="btn-combo" style="width: 230px;" tabindex="0">
+            </div>
+            <div class="icon-box" id="btn-combo" style="width: 230px;" tabindex="0">
                 <i class="ri-phone-line"></i>
                 <i class="ri-home-3-line"></i>
-            </button>
+            </div>
         </div>
 
         <div class="tarif phone" id="phone">
@@ -155,24 +155,26 @@
                 <div class="form-group">
                   <label for="first_name">Имя</label>
                   <br>
-                  <input type="text" id="first_name" name="first_name" placeholder="Введите имя" required />
+                  <input type="text" id="first_name" name="first_name" placeholder="Введите имя" required>
                 </div>
                 <div class="form-group">
                   <label for="last_name">Фамилия</label>
                   <br>
-                  <input type="text" id="last_name" name="last_name" placeholder="Введите фамилию" required />
+                  <input type="text" id="last_name" name="last_name" placeholder="Введите фамилию" required>
                 </div>
                 <div class="form-group">
                   <label for="phone_number">Номер телефона</label>
                   <br>
-                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required>
+                  <div class="error-message"></div>
                 </div>
                 <div class="form-group">
                   <label for="password">Пароль</label>
                   <br>
-                  <input type="password" id="password" name="password" placeholder="Введите пароль" required />
+                  <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                  <div class="error-message"></div>
                 </div>
-                <button type="submit" class="btn-rl">Зарегистрироваться</button>
+                <button type="submit" class="btn-rl" id="reg-btn">Зарегистрироваться</button>
               </form>
             </div>
         </div>
@@ -180,7 +182,7 @@
 
     <div class="popup" id="popup-2">
         <div class="overlay"></div>
-        <div class="content" style="height: 420px;">
+        <div class="content">
             <div class="close-btn" onclick="togglePopupLog()">&times;</div>
             <p style="color: var(--pink-color); font-weight: 700;">АВТОРИЗАЦИЯ</p>
             <form id="registration-form" action="/login/" method="post">
@@ -188,12 +190,12 @@
                 <div class="form-group">
                   <label for="phone_number">Номер телефона</label>
                   <br>
-                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required />
+                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required>
                 </div>
                 <div class="form-group">
                   <label for="password">Пароль</label>
                   <br>
-                  <input type="password" id="password" name="password" placeholder="Введите пароль" required />
+                  <input type="password" id="password" name="password" placeholder="Введите пароль" required>
                 </div>
                 <button type="submit" class="btn-rl">Вход</button>
               </form>

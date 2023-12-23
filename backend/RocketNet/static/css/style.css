@@ -209,6 +209,7 @@ a:hover {
     width: 150px;
     border: 5px solid var(--black-color);
     border-radius: 25px;
+    background-color: var(--white-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -253,7 +254,6 @@ a:hover {
     backdrop-filter: blur(20px);
     box-sizing: 0 0 10px rgba(0, 0, 0, .2);
     width: 600px;
-    height: 700px;
     z-index: 3;
     text-align: center;
     padding: 20px;
@@ -392,5 +392,14 @@ footer {
 #oform:hover {
     scale: 110%;
 }
+
+
+.error-message{
+    color: #ff3860;
+    padding-bottom: 15px;
+    font-size: 18px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
 
 
