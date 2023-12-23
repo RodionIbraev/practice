@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Account
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,3 +17,17 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class CreatePaymentSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    value = serializers.DecimalField(10, 2)
+    return_url = serializers.CharField()
+
+
+# class AccountSerializer(serializers.ModelSerializer):
+#     user_uuid = serializers.UUIDField()
+#
+#     class Meta:
+#         model = Account
+#         fields = ('user_uuid',)

@@ -1,15 +1,21 @@
 import datetime
+
 import jwt
 from django.contrib.auth.password_validation import validate_password
+from django.shortcuts import redirect
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_201_CREATED, HTTP_200_OK
 from rest_framework.views import APIView
 
-from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan
-from .serializers import UserSerializer
+from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan, Account
+from .serializers import UserSerializer, CreatePaymentSerializer
 
 from functools import wraps
+
+from .services.create_payment import create_payment
+from .services.payment_acceptance import payment_acceptance
 
 
 def auth_required(view_func):
@@ -58,6 +64,12 @@ class RegisterView(APIView):
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+
+            Account.objects.create(
+                user_id=serializer.data["id"],
+                balance=0
+            )
+
             return Response(serializer.data)
 
 
@@ -145,3 +157,36 @@ class AccountDetailsView(APIView):
             "user_agreements": user_agreements
         }
         return response
+
+
+class CreatePaymentView(APIView):
+    serializer_class = CreatePaymentSerializer
+
+    @auth_required
+    def post(self, request):
+        try:
+            serializer = CreatePaymentSerializer(data=request.data)
+        except Exception as ex:
+            return Response({"message": ex}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
+        if serializer.is_valid(raise_exception=True):
+            payment = create_payment(serializer.data)
+            return Response(
+                {
+                    'payment': payment,
+                    'confirmation_url': payment.confirmation.confirmation_url,
+                 },
+                status=HTTP_201_CREATED,
+            )
+        return Response({"message": serializer.errors}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class AcceptPaymentView(APIView):
+    @auth_required
+    def get(self, request, balance_change_id):
+        check_payment = payment_acceptance(balance_change_id)
+        if check_payment["result"]:
+            user_id = get_user(request).id
+            user_account_id = Account.objects.get(user_id=user_id).id
+            Account.deposit(pk=user_account_id, amount=check_payment["amount"])
+        return redirect("personal-area")

@@ -1,6 +1,12 @@
+import uuid
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.http import HttpResponseServerError
 from django_softdelete.models import SoftDeleteModel
+
+from .utils import add_change_balance_method, OperationType
 
 STATE_CHOICES = (
     ('new', 'Новый'),
@@ -24,6 +30,58 @@ class User(AbstractUser, SoftDeleteModel):
         verbose_name = "Пользователи"
         verbose_name_plural = "Пользователи"
         ordering = ("first_name",)
+
+
+class Account(models.Model):
+    user = models.OneToOneField(User, verbose_name="Пользователь", editable=False, unique=True, db_index=True, on_delete=models.CASCADE)
+    balance = models.DecimalField(verbose_name="Баланс", max_digits=10, decimal_places=2)
+
+    @classmethod
+    def deposit(cls, pk, amount):
+        return add_change_balance_method(
+            django_model=cls,
+            django_field='balance',
+            pk=pk,
+            amount=amount,
+            operation_type=OperationType.DEPOSIT,
+        )
+
+    def __str__(self) -> str:
+        return f'User id: {self.user_id}'
+
+
+class BalanceChange(models.Model):
+    class OperationType(models.TextChoices):
+        DEPOSIT = ('DT', 'DEPOSIT')
+
+    account = models.ForeignKey(
+        Account,
+        on_delete=models.PROTECT,
+        related_name='balance_changes',
+    )
+
+    amount = models.DecimalField(verbose_name="Сумма", max_digits=10, decimal_places=2,
+        editable=False,
+    )
+    payment_uuid = models.UUIDField(verbose_name="Платеж", db_index=True, null=True)
+    created_date = models.DateTimeField(
+        auto_now_add=True,
+        editable=False,
+        db_index=True,
+    )
+    is_accepted = models.BooleanField(default=False)
+
+    operation_type = models.CharField(max_length=20, choices=OperationType.choices)
+
+    def __str__(self) -> str:
+        return (
+            f'Account id:  {self.account_id} '
+            f'Date time of creation: {self.created_date}'
+            f'Amount: {self.amount}'
+        )
+
+    class Meta:
+        ordering = ['-created_date']
 
 
 class MobileTariffPlan(SoftDeleteModel):
