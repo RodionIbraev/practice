@@ -6,9 +6,14 @@
     <link rel="shortcut icon" href="static/images/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css">
     <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <title>RocketNet</title>
 </head>
 <body>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+          integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
     <header class="header">
         <div class="container">
             <div class="navbar">
@@ -16,7 +21,7 @@
                     <h2><a href="#tarif">Пакеты услуг</a></h2>
                     {% if token %}
                         <h2><a href="/personal-area/">Личный кабинет</a></h2>
-                        <h2><a href="/logout/">Выход</a></h2>
+                        <h2><a onclick="togglePopupLogout()">Выход</a></h2>
                     {% else %}
                         <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
                         <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
@@ -185,17 +190,17 @@
         <div class="content">
             <div class="close-btn" onclick="togglePopupLog()">&times;</div>
             <p style="color: var(--pink-color); font-weight: 700;">АВТОРИЗАЦИЯ</p>
-            <form id="registration-form" action="/login/" method="post">
+            <form id="authorization-form" action="/login/" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                   <label for="phone_number">Номер телефона</label>
                   <br>
-                  <input type="tel" id="phone_number" name="phone_number" placeholder="Введите номер телефона" required>
+                  <input type="tel" id="phone_number_auth" name="phone_number" placeholder="Введите номер телефона" required>
                 </div>
                 <div class="form-group">
                   <label for="password">Пароль</label>
                   <br>
-                  <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                  <input type="password" id="password_auth" name="password" placeholder="Введите пароль" required>
                 </div>
                 <button type="submit" class="btn-rl">Вход</button>
               </form>
@@ -208,5 +213,59 @@
     </footer>
 
     <script src="static/js/main.js"></script>
+    <script type="text/javascript">
+        function togglePopupLogout() {
+            $.ajax({
+                type:'GET',
+                url:'{% url "logout" %}',
+                data:
+                {
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(){
+                      location.reload();
+                   }
+            })
+        };
+
+        $(document).on('submit','#registration-form',function(e){
+            e.preventDefault();
+            $.ajax({
+                type:'POST',
+                url:'{% url "register" %}',
+                data:
+                {
+                    first_name:$("#first_name").val(),
+                    last_name:$("#last_name").val(),
+                    phone_number:$("#phone_number").val(),
+                    password:$("#password").val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(){
+                      document.getElementById("popup-1").classList.toggle("active");
+                      alertify.success("Вы успешно зарегистрировались!");
+                      document.getElementById("popup-2").classList.toggle("active");
+                }
+            })
+        });
+
+        $(document).on('submit','#authorization-form',function(e){
+        e.preventDefault();
+        $.ajax({
+                type:'POST',
+                url:'{% url "login" %}',
+                data:
+                {
+                    phone_number:$("#phone_number_auth").val(),
+                    password:$("#password_auth").val(),
+                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(){
+                      document.getElementById("popup-2").classList.toggle("active");
+                      location.reload();
+                }
+            })
+        });
+    </script>
 </body>
 </html>
