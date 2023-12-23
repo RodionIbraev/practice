@@ -158,11 +158,30 @@ class AccountDetailsView(APIView):
         user_serializer = UserSerializer(user)
         user_account = Account.objects.get(user_id=get_user(request).id)
         user_agreements = [agreement for agreement in Agreement.objects.filter(user=user.id).values()]
+
+        user_mobile_tariffs = []
+        user_home_tariffs = []
+        user_combo_tariffs = []
+        for agreement in user_agreements:
+            mobile_tariff_id = agreement.get('mobile_tariff_plan_id')
+            home_tariff_id = agreement.get('home_tariff_plan_id')
+            combo_tariff_id = agreement.get('combo_tariff_plan_id')
+
+            if mobile_tariff_id is not None:
+                user_mobile_tariffs.append(MobileTariffPlan.objects.get(id=mobile_tariff_id))
+            if home_tariff_id is not None:
+                user_home_tariffs.append(HomeTariffPlan.objects.get(id=home_tariff_id))
+            if combo_tariff_id is not None:
+                user_combo_tariffs.append(ComboTariffPlan.objects.get(id=combo_tariff_id))
+
         response = Response()
         response.data = {
             "user": user_serializer.data,
             "user_agreements": user_agreements,
-            "user_account": user_account
+            "user_account": user_account,
+            "user_mobile_tariffs": user_mobile_tariffs,
+            "user_home_tariffs": user_home_tariffs,
+            "user_combo_tariffs": user_combo_tariffs
         }
         return response
 
