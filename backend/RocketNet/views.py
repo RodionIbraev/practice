@@ -149,6 +149,8 @@ class AccountDetailsView(APIView):
     """
     Личный кабинет пользователя
     """
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = "personalArea.html"
 
     @auth_required
     def get(self, request):
