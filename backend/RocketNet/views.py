@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
-from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_201_CREATED, HTTP_200_OK
+from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_201_CREATED
 from rest_framework.views import APIView
 
 from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan, Account
