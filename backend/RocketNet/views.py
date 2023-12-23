@@ -156,7 +156,7 @@ class AccountDetailsView(APIView):
     def get(self, request):
         user = User.objects.get(id=get_user(request).id)
         user_serializer = UserSerializer(user)
-        user_account = Account.objects.filter(user=get_user(request).id).values()
+        user_account = Account.objects.get(user_id=get_user(request).id)
         user_agreements = [agreement for agreement in Agreement.objects.filter(user=user.id).values()]
         response = Response()
         response.data = {
