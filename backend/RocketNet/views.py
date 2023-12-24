@@ -195,17 +195,15 @@ class AccountDetailsView(APIView):
 
 class AgreementRegistrationView(APIView):
     @auth_required
-    def post(self, request, tariff_id_and_type):
+    def post(self, request, tariff_type, tariff_id):
         """
         Оформление договора пользователем
         """
 
         user = User.objects.get(id=get_user(request).id)
-        tariff_id = int(tariff_id_and_type[-1])
-        type_tariff = tariff_id_and_type[:-2]
-        if type_tariff == "mobile_tariff_plan":
+        if tariff_type == "mobile_tariff_plan":
             new_agreement = Agreement.objects.create(user=user, mobile_tariff_plan_id=tariff_id)
-        elif type_tariff == "home_tariff_plan":
+        elif tariff_type == "home_tariff_plan":
             new_agreement = Agreement.objects.create(user=user, home_tariff_plan_id=tariff_id)
         else:
             new_agreement = Agreement.objects.create(user=user, combo_tariff_plan_id=tariff_id)

@@ -270,24 +270,30 @@
         $(document).ready(function() {
           $('#oform_mobile_tariff_plan').click(function() {
             let card = $(this).closest('.tarifs');
-            let tariffId = card.data('id');
-            $.post('/agreement-registration/' + tariffId, function(response) {
+            let tariffIdAndType = card.data('id');
+            let tariffId = tariffIdAndType.slice(-1);
+            let tariffType = tariffIdAndType.slice(0, -2);
+            $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
               alertify.success("Вы успешно оформили тариф!");
             });
           });
 
           $('#oform_home_tariff_plan').click(function() {
             let card = $(this).closest('.tarifs');
-            let tariffId = card.data('id');
-            $.post('/agreement-registration/' + tariffId, function(response) {
+            let tariffIdAndType = card.data('id');
+            let tariffId = tariffIdAndType.slice(-1);
+            let tariffType = tariffIdAndType.slice(0, -2);
+            $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
               alertify.success("Вы успешно оформили тариф!");
             });
           });
 
           $('#oform_combo_tariff_plan').click(function() {
             let card = $(this).closest('.tarifs');
-            let tariffId = card.data('id');
-            $.post('/agreement-registration/' + tariffId, function(response) {
+            let tariffIdAndType = card.data('id');
+            let tariffId = tariffIdAndType.slice(-1);
+            let tariffType = tariffIdAndType.slice(0, -2);
+            $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
               alertify.success("Вы успешно оформили тариф!");
             });
           });
