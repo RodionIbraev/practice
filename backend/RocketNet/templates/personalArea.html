@@ -103,7 +103,6 @@
         </div>
     </div>
 
-    <script src="static/js/personalArea.js"></script>
     <script type="text/javascript">
         function togglePopupDeposit() {
             document.getElementById("popup-deposit").classList.toggle("active");
@@ -139,6 +138,34 @@
                     window.location.replace(data.confirmation_url);
                 }
             });
+        });
+
+        $(document).ready(function() {
+          $(".neoform").click(function() {
+            let card = $(this).closest(".tarifs-oform");
+            let tariffIdAndType = card.data("id");
+            let tariffId = tariffIdAndType.slice(-1);
+            let tariffType = tariffIdAndType.slice(0, -2);
+            console.log(tariffId);
+
+            alertify.confirm("Подтверждение отключения тарифа", "Вы уверены, что хотите отключить данный тариф?")
+              .set("labels", { ok: "Да", cancel: "Отмена" })
+              .set("onok", function() {
+                $.ajax({
+                  url: "/agreement-delete/" + tariffType + "/" + tariffId,
+                  type: "DELETE",
+                  success: function(response) {
+                    alertify.success(response.success_message);
+                  },
+                  error: function() {
+                    alertify.error("Отключение тарифа не удалось!");
+                  }
+                });
+              })
+              .set("oncancel", function() {
+                alertify.error("Отключение тарифа отменено!");
+              });
+          });
         });
     </script>
 </body>
