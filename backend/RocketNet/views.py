@@ -135,6 +135,10 @@ class TariffPlansDetailsView(APIView):
     template_name = "homePage.html"
 
     def get(self, request):
+        response = Response()
+        user = get_user(request)
+        user_account = user.account
+
         token = request.COOKIES.get("jwt_token")
         if token:
             token = "token"
@@ -143,6 +147,7 @@ class TariffPlansDetailsView(APIView):
         combo_tariff_plans = [combo_tariff_plans for combo_tariff_plans in ComboTariffPlan.objects.all().values()]
         response = Response()
         response.data = {
+            "user_account": user_account,
             "mobile_tariff_plans": mobile_tariff_plans,
             "home_tariff_plans": home_tariff_plans,
             "combo_tariff_plans": combo_tariff_plans,
