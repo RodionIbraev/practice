@@ -339,7 +339,6 @@ footer {
 }
 
 .tarifs {
-    height: 200px;
     width: 1300px;
     background-color: var(--black-color);
     margin: 0 auto;
@@ -361,6 +360,17 @@ footer {
     margin-top: 50px;
     display: flex;
     align-items: center;
+}
+
+.plans-combo i {
+    color: var(--white-color);
+    font-size: 50px;
+    padding-right: 10px;
+}
+
+.combo-mombo {
+    display: flex;
+    gap: 100px;
 }
 
 .plans i {
@@ -385,7 +395,7 @@ footer {
     font-weight: 700;
     position: relative;
     left: 900px;
-    top: -125px;
+    top: -20px;
     cursor: pointer;
 }
 

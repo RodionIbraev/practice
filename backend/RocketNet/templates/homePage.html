@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="static/images/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css">
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <title>RocketNet</title>
@@ -138,10 +138,19 @@
                     <h4>{{ combo_tariff_plan.name }}</h4>
                     <h5 style="color: var(--pink-color); font-weight: 700;">{{ combo_tariff_plan.price }} &#8381;/мес</h5>
                 </div>
-                <div class="plans">
-                    <i class="ri-phone-line"></i> <h5>{{ combo_tariff_plan.mobile_tariff_plan }}</h5>
-                    <h5>+</h5>
-                    <i class="ri-tv-line"></i> <h5>{{ combo_tariff_plan.home_tariff_plan }}</h5>
+                <br>
+                <div class="combo-mombo">
+                    <div class="plans-combo">
+                    <h5>Мобильные услуги:</h5>
+                        <h5> <i class="ri-global-line"></i> {{ combo_tariff_plan.mobile_internet }} ГБ</h5>
+                        <h5> <i class="ri-phone-line"></i> {{ combo_tariff_plan.minutes }} МИНУТ</h5>
+                        <h5> <i class="ri-mail-line"></i> {{ combo_tariff_plan.sms }} СМС</h5>
+                    </div>
+                    <div class="plans-combo">
+                    <h5>Домашние услуги:</h5>
+                        <h5> <i class="ri-global-line"></i> {{ combo_tariff_plan.home_internet }} ГБ</h5>
+                        <h5> <i class="ri-tv-line"></i> {{ combo_tariff_plan.tv_channels }} КАНАЛОВ</h5>
+                    </div>
                 </div>
                 <button type="submit" id="oform_combo_tariff_plan" class="oform">Оформить</button>
             </div>
