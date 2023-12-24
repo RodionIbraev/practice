@@ -160,10 +160,10 @@ class AccountDetailsView(APIView):
 
     @auth_required
     def get(self, request):
-        user = User.objects.get(id=get_user(request).id)
-        user_serializer = UserSerializer(user)
-        user_account = Account.objects.get(user_id=get_user(request).id)
+        user = get_user(request)
+        user_account = user.account
         user_agreements = [agreement for agreement in Agreement.objects.filter(user=user.id).values()]
+        user_serializer = UserSerializer(user)
 
         user_mobile_tariffs = []
         user_home_tariffs = []
@@ -199,20 +199,32 @@ class AgreementRegistrationView(APIView):
         """
         Оформление договора пользователем
         """
-
-        user = User.objects.get(id=get_user(request).id)
-        if tariff_type == "mobile_tariff_plan":
-            new_agreement = Agreement.objects.create(user=user, mobile_tariff_plan_id=tariff_id)
-        elif tariff_type == "home_tariff_plan":
-            new_agreement = Agreement.objects.create(user=user, home_tariff_plan_id=tariff_id)
-        else:
-            new_agreement = Agreement.objects.create(user=user, combo_tariff_plan_id=tariff_id)
-
         response = Response()
-        response.data = {
-            "new_agreement": model_to_dict(new_agreement),
-            "created_at": new_agreement.created_at
-        }
+        user = get_user(request)
+        user_account = user.account
+        user_balance = user_account.balance
+
+        tariff_plan = None
+        if tariff_type == "mobile_tariff_plan":
+            tariff_plan = MobileTariffPlan.objects.get(id=tariff_id)
+        elif tariff_type == "home_tariff_plan":
+            tariff_plan = HomeTariffPlan.objects.get(id=tariff_id)
+        else:
+            tariff_plan = ComboTariffPlan.objects.get(id=tariff_id)
+
+        if user_balance - tariff_plan.price >= 0:
+            user_account.balance -= tariff_plan.price
+            user_account.save(update_fields=["balance"])
+            new_agreement = Agreement.objects.create(user=user, **{f"{tariff_type}_id": tariff_id})
+            response.data = {
+                "new_agreement": model_to_dict(new_agreement),
+                "created_at": new_agreement.created_at
+            }
+        else:
+            response.data = {
+                "error": "На вашем счете недостаточно средств. Пополните лицевой счёт!",
+            }
+
         return response
 
 
@@ -236,7 +248,6 @@ class CreatePaymentView(APIView):
                 status=HTTP_201_CREATED,
             )
         return Response({"message": serializer.errors}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 class AcceptPaymentView(APIView):
     @auth_required

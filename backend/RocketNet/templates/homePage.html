@@ -96,7 +96,7 @@
         </div>
 
         <div class="tarif phone" id="phone">
-            <p>Мобильная связь</p>
+            <p>Мобильные тарифы</p>
             {% for mobile_tariff_plan in mobile_tariff_plans %}
             <div class="tarifs" data-id="mobile_tariff_plan_{{mobile_tariff_plan.id}}">
                 <div class="name-cost">
@@ -114,7 +114,7 @@
         </div>
 
         <div class="tarif home" id="home" style="display: none;">
-            <p>Домашний интернет</p>
+            <p>Домашние тарифы</p>
             {% for home_tariff_plan in home_tariff_plans %}
             <div class="tarifs" data-id="home_tariff_plan_{{home_tariff_plan.id}}">
                 <div class="name-cost">
@@ -225,11 +225,11 @@
     <script type="text/javascript">
         function togglePopupLogout() {
             $.ajax({
-                type:'GET',
-                url:'{% url "logout" %}',
+                type:"GET",
+                url:"{% url "logout" %}",
                 data:
                 {
-                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
                 },
                 success:function(){
                       location.reload();
@@ -237,18 +237,18 @@
             })
         };
 
-        $(document).on('submit','#registration-form',function(e){
+        $(document).on("submit","#registration-form",function(e){
             e.preventDefault();
             $.ajax({
-                type:'POST',
-                url:'{% url "register" %}',
+                type:"POST",
+                url:"{% url "register" %}",
                 data:
                 {
                     first_name:$("#first_name").val(),
                     last_name:$("#last_name").val(),
                     phone_number:$("#phone_number").val(),
                     password:$("#password").val(),
-                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
                 },
                 success:function(){
                       document.getElementById("popup-1").classList.toggle("active");
@@ -258,16 +258,16 @@
             })
         });
 
-        $(document).on('submit','#authorization-form',function(e){
+        $(document).on("submit","#authorization-form",function(e){
         e.preventDefault();
         $.ajax({
-                type:'POST',
-                url:'{% url "login" %}',
+                type:"POST",
+                url:"{% url "login" %}",
                 data:
                 {
                     phone_number:$("#phone_number_auth").val(),
                     password:$("#password_auth").val(),
-                    csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+                    csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
                 },
                 success:function(){
                       document.getElementById("popup-2").classList.toggle("active");
@@ -277,22 +277,24 @@
         });
 
         $(document).ready(function() {
-          $('.oform').click(function() {
+          $(".oform").click(function() {
             if ("{{ token }}" != "None") {
-            console.log("{{ token }}");
-            let card = $(this).closest('.tarifs');
-            let tariffIdAndType = card.data('id');
+            let card = $(this).closest(".tarifs");
+            let tariffIdAndType = card.data("id");
             let tariffId = tariffIdAndType.slice(-1);
             let tariffType = tariffIdAndType.slice(0, -2);
             alertify.confirm("Подтверждение оформления тарифа", "Вы уверены, что хотите оформить данный тариф?",
               function() {
-                $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
-                  alertify.success("Вы успешно оформили тариф!");
+                $.post("/agreement-registration/" + tariffType + "/" + tariffId, function(response) {
+                  if (response.error){
+                    alertify.alert("Ошибка оплаты", response.error);
+                  }
+                  else alertify.success("Вы успешно оформили тариф!");
                 });
               },
               function() {
-                alertify.error('Оформление тарифа отменено!');
-              }).set('labels', {ok: 'Да', cancel: 'Отмена'});
+                alertify.error("Оформление тарифа отменено!");
+              }).set("labels", {ok: "Да", cancel: "Отмена"});
               } else {
                 alertify.error("Вы не выполнили авторизацию!");
                 document.getElementById("popup-2").classList.toggle("active");
