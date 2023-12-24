@@ -521,3 +521,7 @@ h6 {
 .neoform:hover {
     scale: 110%;
 }
+
+.phone {
+    display: none;
+}

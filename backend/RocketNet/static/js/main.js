@@ -34,12 +34,6 @@ btn_combo.addEventListener('click', ()=>{
     home.style.display='none';
 });
 
-window.addEventListener('load', function() {
-    var button = document.getElementsByClassName('icon-box');
-    if (button.length > 0) {
-      button[0].focus();
-    }
-});
 
 
 // Ошибки регистрации пользователей
