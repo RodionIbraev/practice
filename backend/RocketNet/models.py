@@ -4,12 +4,6 @@ from django_softdelete.models import SoftDeleteModel
 
 from .utils import add_change_balance_method, OperationType
 
-STATE_CHOICES = (
-    ("new", "Новый"),
-    ("connected", "Подключен"),
-    ("canceled", "Отменен"),
-)
-
 
 class User(AbstractUser, SoftDeleteModel):
     phone_number = models.CharField(max_length=128, unique=True, verbose_name="Номер телефона")
@@ -144,11 +138,10 @@ class Agreement(SoftDeleteModel):
                                          on_delete=models.DO_NOTHING, null=True, blank=True)
     combo_tariff_plan = models.ForeignKey(ComboTariffPlan, verbose_name="Комбо-тариф",
                                           on_delete=models.DO_NOTHING, null=True, blank=True)
-    state = models.CharField(verbose_name="Статус", choices=STATE_CHOICES, max_length=15)
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата заключения договора")
 
     def __str__(self):
-        return f"{self.state} договор с {self.user}"
+        return f"Договор с {self.user}"
 
     class Meta:
         verbose_name = "Договоры"

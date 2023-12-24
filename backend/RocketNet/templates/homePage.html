@@ -98,7 +98,7 @@
         <div class="tarif phone" id="phone">
             <p>Мобильная связь</p>
             {% for mobile_tariff_plan in mobile_tariff_plans %}
-            <div class="tarifs">
+            <div class="tarifs" data-id="mobile_tariff_plan_{{mobile_tariff_plan.id}}">
                 <div class="name-cost">
                     <h4>{{ mobile_tariff_plan.name }}</h4>
                     <h5 style="color: var(--pink-color); font-weight: 700;">{{ mobile_tariff_plan.price }} &#8381;/мес</h5>
@@ -108,7 +108,7 @@
                     <i class="ri-phone-line"></i> <h5>{{ mobile_tariff_plan.minutes }} МИНУТ</h5>
                     <i class="ri-mail-line"></i> <h5>{{ mobile_tariff_plan.sms }} СМС</h5>
                 </div>
-                <button type="submit" id="oform">Оформить</button>
+                <button type="submit" id="oform_mobile_tariff_plan" class="oform">Оформить</button>
             </div>
             {% endfor %}
         </div>
@@ -116,7 +116,7 @@
         <div class="tarif home" id="home" style="display: none;">
             <p>Домашний интернет</p>
             {% for home_tariff_plan in home_tariff_plans %}
-            <div class="tarifs">
+            <div class="tarifs" data-id="home_tariff_plan_{{home_tariff_plan.id}}">
                 <div class="name-cost">
                     <h4>{{ home_tariff_plan.name }}</h4>
                     <h5 style="color: var(--pink-color); font-weight: 700;">{{ home_tariff_plan.price }} &#8381;/мес</h5>
@@ -125,7 +125,7 @@
                     <i class="ri-global-line"></i> <h5>{{ home_tariff_plan.home_internet }} ГБ</h5>
                     <i class="ri-tv-line"></i> <h5>{{ home_tariff_plan.tv_channels }} КАНАЛОВ</h5>
                 </div>
-                <button type="submit" id="oform">Оформить</button>
+                <button type="submit" id="oform_home_tariff_plan" class="oform">Оформить</button>
             </div>
             {% endfor %}
         </div>
@@ -133,7 +133,7 @@
         <div class="tarif combo" id="combo" style="display: none;">
             <p>Комбо-тарифы</p>
             {% for combo_tariff_plan in combo_tariff_plans %}
-            <div class="tarifs">
+            <div class="tarifs" data-id="combo_tariff_plan_{{combo_tariff_plan.id}}">
                 <div class="name-cost">
                     <h4>{{ combo_tariff_plan.name }}</h4>
                     <h5 style="color: var(--pink-color); font-weight: 700;">{{ combo_tariff_plan.price }} &#8381;/мес</h5>
@@ -143,7 +143,7 @@
                     <h5>+</h5>
                     <i class="ri-tv-line"></i> <h5>{{ combo_tariff_plan.home_tariff_plan }}</h5>
                 </div>
-                <button type="submit" id="oform">Оформить</button>
+                <button type="submit" id="oform_combo_tariff_plan" class="oform">Оформить</button>
             </div>
             {% endfor %}
         </div>
@@ -265,6 +265,32 @@
                       location.reload();
                 }
             })
+        });
+
+        $(document).ready(function() {
+          $('#oform_mobile_tariff_plan').click(function() {
+            let card = $(this).closest('.tarifs');
+            let tariffId = card.data('id');
+            $.post('/agreement-registration/' + tariffId, function(response) {
+              alertify.success("Вы успешно оформили тариф!");
+            });
+          });
+
+          $('#oform_home_tariff_plan').click(function() {
+            let card = $(this).closest('.tarifs');
+            let tariffId = card.data('id');
+            $.post('/agreement-registration/' + tariffId, function(response) {
+              alertify.success("Вы успешно оформили тариф!");
+            });
+          });
+
+          $('#oform_combo_tariff_plan').click(function() {
+            let card = $(this).closest('.tarifs');
+            let tariffId = card.data('id');
+            $.post('/agreement-registration/' + tariffId, function(response) {
+              alertify.success("Вы успешно оформили тариф!");
+            });
+          });
         });
     </script>
 </body>

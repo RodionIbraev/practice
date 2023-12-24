@@ -27,7 +27,7 @@ class ComboTariffPlanAdmin(admin.ModelAdmin):
 
 @admin.register(Agreement)
 class AgreementAdmin(admin.ModelAdmin):
-    list_filter = ("state",)
+    pass
 
 
 @admin.register(BalanceChange)

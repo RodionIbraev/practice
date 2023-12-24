@@ -374,7 +374,7 @@ footer {
     padding-left: 0;
 }
 
-#oform {
+.oform {
     background-color: transparent;
     width: 300px;
     height: 100px;
@@ -389,7 +389,7 @@ footer {
     cursor: pointer;
 }
 
-#oform:hover {
+.oform:hover {
     scale: 110%;
 }
 
