@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/images/logo.png">
+    <link rel="shortcut icon" href="/static/images/logo.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <title>Личный кабинет</title>
@@ -31,6 +31,55 @@
             <p>Баланс</p>
             <h6>{{ user_account.balance }} &#8381;</h6>
             <button onclick="togglePopupDeposit()" id="balance-btn">ПОПОЛНИТЬ</button>
+        </section>
+
+        <section class="purchases">
+            <p>Оформленные тарифы</p>
+            <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Мобильные тарифы:</p>
+            {% for user_mobile_tariffs in user_mobile_tariffs %}
+            <div class="tarifs-oform" data-id="">
+                    <h4>{{ user_mobile_tariffs.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ user_mobile_tariffs.price }} &#8381;/мес</h5>
+                <div class="plans-oform">
+                    <h5><i class="ri-global-line"></i> {{ user_mobile_tariffs.mobile_internet }} ГБ</h5>
+                    <h5><i class="ri-phone-line"></i> {{ user_mobile_tariffs.minutes }} МИНУТ</h5>
+                    <h5><i class="ri-mail-line"></i> {{ user_mobile_tariffs.sms }} СМС</h5>
+                </div>
+                <button type="submit" id="" class="neoform">Отключить</button>
+            </div>
+            {% endfor %}
+
+            <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Домашние тарифы:</p>
+            {% for user_home_tariffs in user_home_tariffs %}
+            <div class="tarifs-oform" data-id="">
+                    <h4>{{ user_home_tariffs.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ user_home_tariffs.price }} &#8381;/мес</h5>
+                <div class="plans-oform">
+                    <h5><i class="ri-global-line"></i> {{ user_home_tariffs.home_internet }} ГБ</h5>
+                    <h5><i class="ri-tv-line"></i> {{ user_home_tariffs.tv_channels }} КАНАЛОВ</h5>
+                </div>
+                <button type="submit" id="" class="neoform">Отключить</button>
+            </div>
+            {% endfor %}
+
+            <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Комбо-тарифы:</p>
+            {% for user_combo_tariffs in user_combo_tariffs %}
+            <div class="tarifs-oform" data-id="">
+                <h4>{{ user_combo_tariffs.name }}</h4>
+                <h5 style="color: var(--pink-color); font-weight: 700;">{{ user_combo_tariffs.price }} &#8381;/мес</h5>
+                <div class="plans-oform">
+                    <h5>Мобильные услуги:</h5>
+                    <h5> <i class="ri-global-line"></i> {{ user_combo_tariffs.mobile_internet }} ГБ</h5>
+                    <h5> <i class="ri-phone-line"></i> {{ user_combo_tariffs.minutes }} МИНУТ</h5>
+                    <h5> <i class="ri-mail-line"></i> {{ user_combo_tariffs.sms }} СМС</h5>
+                    <br>
+                    <h5>Домашние услуги:</h5>
+                    <h5> <i class="ri-global-line"></i> {{ user_combo_tariffs.home_internet }} ГБ</h5>
+                    <h5> <i class="ri-tv-line"></i> {{ user_combo_tariffs.tv_channels }} КАНАЛОВ</h5>
+                </div>
+                <button type="submit" id="" class="neoform">Отключить</button>
+            </div>
+            {% endfor %}
         </section>
     </div>
 
