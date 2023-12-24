@@ -20,7 +20,6 @@ from functools import wraps
 from .services.create_payment import create_payment
 from .services.payment_acceptance import payment_acceptance
 
-
 load_dotenv()
 
 
@@ -136,23 +135,24 @@ class TariffPlansDetailsView(APIView):
 
     def get(self, request):
         response = Response()
-        user = get_user(request)
-        user_account = user.account
 
-        token = request.COOKIES.get("jwt_token")
-        if token:
-            token = "token"
         mobile_tariff_plans = [mobile_tariff_plan for mobile_tariff_plan in MobileTariffPlan.objects.all().values()]
         home_tariff_plans = [home_tariff_plans for home_tariff_plans in HomeTariffPlan.objects.all().values()]
         combo_tariff_plans = [combo_tariff_plans for combo_tariff_plans in ComboTariffPlan.objects.all().values()]
-        response = Response()
+
         response.data = {
-            "user_account": user_account,
             "mobile_tariff_plans": mobile_tariff_plans,
             "home_tariff_plans": home_tariff_plans,
             "combo_tariff_plans": combo_tariff_plans,
-            "token": token
         }
+
+        token = request.COOKIES.get("jwt_token")
+        if token:
+            user = get_user(request)
+            user_account = user.account
+            response.data["token"] = "token"
+            response.data["user_account"] = user_account
+
         return response
 
 
@@ -194,6 +194,20 @@ class AccountDetailsView(APIView):
             "user_home_tariffs": user_home_tariffs,
             "user_combo_tariffs": user_combo_tariffs,
             "return_url": "https://" + os.getenv("NGROK_HOST") + "/accept-payment/"
+        }
+        return response
+
+
+class AgreementDeleteView(APIView):
+    @auth_required
+    def delete(self, request, tariff_type, tariff_id):
+        response = Response()
+        user = get_user(request)
+
+        user_agreement = Agreement.objects.filter(user=user, **{f"{tariff_type}_id": tariff_id}).first()
+        user_agreement.delete()
+        response.data = {
+            "success_message": "Тариф успешно отключен!",
         }
         return response
 
@@ -249,10 +263,11 @@ class CreatePaymentView(APIView):
                 {
                     'payment': payment,
                     'confirmation_url': payment.confirmation.confirmation_url,
-                 },
+                },
                 status=HTTP_201_CREATED,
             )
         return Response({"message": serializer.errors}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 class AcceptPaymentView(APIView):
     @auth_required

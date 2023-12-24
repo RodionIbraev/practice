@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 from .views import RegisterView, LoginView, LogoutView, AccountDetailsView, TariffPlansDetailsView, CreatePaymentView, \
-    AcceptPaymentView, AgreementRegistrationView
+    AcceptPaymentView, AgreementRegistrationView, AgreementDeleteView
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
@@ -27,5 +27,7 @@ urlpatterns = [
     path("create-payment/", CreatePaymentView.as_view(), name="create-payment"),
     path("agreement-registration/<str:tariff_type>/<str:tariff_id>", AgreementRegistrationView.as_view(),
          name="agreement-registration"),
-    path("accept-payment/<str:balance_change_id>/", AcceptPaymentView.as_view(), name="create-payment"),
+    path("agreement-delete/<str:tariff_type>/<str:tariff_id>", AgreementDeleteView.as_view(),
+         name="agreement-delete"),
+    path("accept-payment/<str:balance_change_id>/", AcceptPaymentView.as_view(), name="accept-payment"),
 ]
