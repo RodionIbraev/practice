@@ -3,6 +3,7 @@ import os
 
 import jwt
 from django.contrib.auth.password_validation import validate_password
+from django.forms import model_to_dict
 from django.shortcuts import redirect
 from dotenv import load_dotenv
 from rest_framework.exceptions import AuthenticationFailed
@@ -188,6 +189,31 @@ class AccountDetailsView(APIView):
             "user_home_tariffs": user_home_tariffs,
             "user_combo_tariffs": user_combo_tariffs,
             "return_url": "https://" + os.getenv("NGROK_HOST") + "/accept-payment/"
+        }
+        return response
+
+
+class AgreementRegistrationView(APIView):
+    @auth_required
+    def post(self, request, tariff_id_and_type):
+        """
+        Оформление договора пользователем
+        """
+
+        user = User.objects.get(id=get_user(request).id)
+        tariff_id = int(tariff_id_and_type[-1])
+        type_tariff = tariff_id_and_type[:-2]
+        if type_tariff == "mobile_tariff_plan":
+            new_agreement = Agreement.objects.create(user=user, mobile_tariff_plan_id=tariff_id)
+        elif type_tariff == "home_tariff_plan":
+            new_agreement = Agreement.objects.create(user=user, home_tariff_plan_id=tariff_id)
+        else:
+            new_agreement = Agreement.objects.create(user=user, combo_tariff_plan_id=tariff_id)
+
+        response = Response()
+        response.data = {
+            "new_agreement": model_to_dict(new_agreement),
+            "created_at": new_agreement.created_at
         }
         return response
 
