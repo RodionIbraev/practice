@@ -23,11 +23,3 @@ class CreatePaymentSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     value = serializers.DecimalField(10, 2)
     return_url = serializers.CharField()
-
-
-# class AccountSerializer(serializers.ModelSerializer):
-#     user_uuid = serializers.UUIDField()
-#
-#     class Meta:
-#         model = Account
-#         fields = ('user_uuid',)

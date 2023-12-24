@@ -1,8 +1,10 @@
 import datetime
+import os
 
 import jwt
 from django.contrib.auth.password_validation import validate_password
 from django.shortcuts import redirect
+from dotenv import load_dotenv
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -16,6 +18,9 @@ from functools import wraps
 
 from .services.create_payment import create_payment
 from .services.payment_acceptance import payment_acceptance
+
+
+load_dotenv()
 
 
 def auth_required(view_func):
@@ -181,7 +186,8 @@ class AccountDetailsView(APIView):
             "user_account": user_account,
             "user_mobile_tariffs": user_mobile_tariffs,
             "user_home_tariffs": user_home_tariffs,
-            "user_combo_tariffs": user_combo_tariffs
+            "user_combo_tariffs": user_combo_tariffs,
+            "return_url": "https://" + os.getenv("NGROK_HOST") + "/accept-payment/"
         }
         return response
 
