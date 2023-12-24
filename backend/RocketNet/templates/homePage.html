@@ -22,6 +22,8 @@
                     {% if token %}
                         <h2><a href="/personal-area/">Личный кабинет</a></h2>
                         <h2><a onclick="togglePopupLogout()">Выход</a></h2>
+                    </div>
+                        <h2 style="cursor: default; color: var(--pink-color); padding-bottom: 10px; font-weight: 700; text-align: right;">Баланс: {{ user_account.balance }} &#8381;</h2>
                     {% else %}
                         <h2><a onclick="togglePopupLog()">Авторизация</a></h2>
                         <button onclick="togglePopupReg()" id="btn-auto">Регистрация</button>
