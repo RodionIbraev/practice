@@ -278,13 +278,25 @@
 
         $(document).ready(function() {
           $('.oform').click(function() {
+            if ("{{ token }}" != "None") {
+            console.log("{{ token }}");
             let card = $(this).closest('.tarifs');
             let tariffIdAndType = card.data('id');
             let tariffId = tariffIdAndType.slice(-1);
             let tariffType = tariffIdAndType.slice(0, -2);
-            $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
-              alertify.success("Вы успешно оформили тариф!");
-            });
+            alertify.confirm("Подтверждение оформления тарифа", "Вы уверены, что хотите оформить данный тариф?",
+              function() {
+                $.post('/agreement-registration/' + tariffType + '/' + tariffId, function(response) {
+                  alertify.success("Вы успешно оформили тариф!");
+                });
+              },
+              function() {
+                alertify.error('Оформление тарифа отменено!');
+              }).set('labels', {ok: 'Да', cancel: 'Отмена'});
+              } else {
+                alertify.error("Вы не выполнили авторизацию!");
+                document.getElementById("popup-2").classList.toggle("active");
+              }
           });
         });
     </script>

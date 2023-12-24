@@ -137,7 +137,7 @@ class TariffPlansDetailsView(APIView):
     def get(self, request):
         token = request.COOKIES.get("jwt_token")
         if token:
-            jwt.decode(token, "secret", algorithms=["HS256"])
+            token = "token"
         mobile_tariff_plans = [mobile_tariff_plan for mobile_tariff_plan in MobileTariffPlan.objects.all().values()]
         home_tariff_plans = [home_tariff_plans for home_tariff_plans in HomeTariffPlan.objects.all().values()]
         combo_tariff_plans = [combo_tariff_plans for combo_tariff_plans in ComboTariffPlan.objects.all().values()]
