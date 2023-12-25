@@ -77,8 +77,8 @@ class BalanceChange(models.Model):
         )
 
     class Meta:
-        verbose_name = "Изменение баланса"
-        verbose_name_plural = "Изменение баланса"
+        verbose_name = "Пополнение баланса"
+        verbose_name_plural = "Пополнение баланса"
         ordering = ["-created_date"]
 
 
