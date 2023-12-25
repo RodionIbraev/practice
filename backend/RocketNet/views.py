@@ -218,11 +218,11 @@ class AccountDetailsView(APIView):
 
             if optional_equipment_id is not None:
                 try:
-                    optional_equipment = MobileTariffPlan.objects.get(id=mobile_tariff_id)
-                except MobileTariffPlan.DoesNotExist:
+                    optional_equipment = OptionalEquipment.objects.get(id=optional_equipment_id)
+                except OptionalEquipment.DoesNotExist:
                     try:
-                        optional_equipment = MobileTariffPlan.objects.filter(id=mobile_tariff_id, is_deleted=True).get()
-                    except MobileTariffPlan.DoesNotExist:
+                        optional_equipment = OptionalEquipment.objects.filter(id=optional_equipment_id, is_deleted=True).get()
+                    except OptionalEquipment.DoesNotExist:
                         optional_equipment = None
                 if optional_equipment is not None:
                     user_optional_equipments.append(optional_equipment)
@@ -280,7 +280,7 @@ class AgreementEquipmentRegistrationView(APIView):
     @auth_required
     def post(self, request, equipment_id):
         """
-        Оформление договора на оборудование пользователем
+        Оформление договора на аренду оборудования пользователем
         """
         response = Response()
         user = get_user(request)
@@ -325,10 +325,10 @@ class AgreementEquipmentDeleteView(APIView):
         response = Response()
         user = get_user(request)
 
-        user_agreement = Agreement.objects.filter(user=user, **{f"equipment_id": equipment_id}).first()
+        user_agreement = Agreement.objects.filter(user=user, **{f"optional_equipment_id": equipment_id}).first()
         user_agreement.delete()
         response.data = {
-            "success_message": "Обородувание успешно отключено!",
+            "success_message": "Аренда обородувания успешна отключена!",
         }
         return response
 

@@ -30,7 +30,7 @@ urlpatterns = [
          name="agreement-tariff-registration"),
     path("agreement-equipment-registration/<str:equipment_id>",
          AgreementEquipmentRegistrationView.as_view(),
-         name="agreement-tariff-registration"),
+         name="agreement-equipment-registration"),
     path("agreement-tariff-delete/<str:tariff_type>/<str:tariff_id>", AgreementTariffDeleteView.as_view(),
          name="agreement-tariff-delete"),
     path("agreement-equipment-delete/<str:equipment_id>", AgreementEquipmentDeleteView.as_view(),

@@ -92,10 +92,10 @@
             {% if user_optional_equipments|length != 0 %}
             <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Дополнительное оборудование:</p>
             {% for user_optional_equipment in user_optional_equipments %}
-            <div class="tarifs-oform" data-id="{{user_optional_equipments.id}}">
+            <div class="tarifs-oform" data-id="{{user_optional_equipment.id}}">
                     <h4>{{ user_optional_equipment.name }}</h4>
                     <h5 style="color: var(--pink-color); font-weight: 700;">{{ user_optional_equipment.price }} &#8381;/мес</h5>
-                <button type="submit" id="neoform_optional_equipment" class="neoform">Отключить</button>
+                <button type="submit" id="neoform_optional_equipment" class="equipneoform">Отключить</button>
             </div>
             {% endfor %}
             {% endif %}
@@ -163,7 +163,6 @@
             let tariffIdAndType = card.data("id");
             let tariffId = tariffIdAndType.slice(-1);
             let tariffType = tariffIdAndType.slice(0, -2);
-            console.log(tariffId);
 
             alertify.confirm("Вы уверены, что хотите отключить данный тариф?")
               .setHeader("Подтверждение отключения тарифа")
@@ -182,6 +181,33 @@
               })
               .set("oncancel", function() {
                 alertify.error("Отключение тарифа отменено!");
+              });
+          });
+        });
+
+        $(document).ready(function() {
+          $(".equipneoform").click(function() {
+            let card = $(this).closest(".tarifs-oform");
+            let EquipId = card.data("id");
+            console.log(EquipId);
+
+            alertify.confirm("Вы уверены, что хотите отключить аренду данного оборудования?")
+              .setHeader("Подтверждение отключения аренды оборудования")
+              .set("labels", { ok: "Да", cancel: "Отмена" })
+              .set("onok", function() {
+                $.ajax({
+                  url: "/agreement-equipment-delete/" + EquipId,
+                  type: "DELETE",
+                  success: function(response) {
+                    alertify.success(response.success_message);
+                  },
+                  error: function() {
+                    alertify.error("Отключение аренды оборудования не удалось!");
+                  }
+                });
+              })
+              .set("oncancel", function() {
+                alertify.error("Отключение аренды оборудования отменено!");
               });
           });
         });

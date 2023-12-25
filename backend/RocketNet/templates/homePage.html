@@ -174,7 +174,7 @@
                 <div class="descriprion">
                     <h5>{{ optional_equipment.description }}</h5>
                 </div>
-                <button type="submit" id="oform_optional_equipment" class="oform">Оформить</button>
+                <button type="submit" id="oform_optional_equipment" class="oformequip">Оформить</button>
             </div>
             {% endfor %}
         </div>
@@ -316,6 +316,30 @@
               },
               function() {
                 alertify.error("Оформление тарифа отменено!");
+              }).set("labels", {ok: "Да", cancel: "Отмена"});
+              } else {
+                alertify.error("Вы не выполнили авторизацию!");
+                document.getElementById("popup-2").classList.toggle("active");
+              }
+          });
+        });
+
+        $(document).ready(function() {
+          $(".oformequip").click(function() {
+            if ("{{ token }}" != "None") {
+            let card = $(this).closest(".tarifs");
+            let EquipId = card.data("id");
+  alertify.confirm("Подтверждение оформления оборудования", "Вы уверены, что хотите оформить аренду данного оборудования?",
+              function() {
+                $.post("/agreement-equipment-registration/" + EquipId, function(response) {
+                  if (response.error){
+                    alertify.alert("Ошибка оплаты", response.error);
+                  }
+                  else alertify.success("Вы успешно оформили аренду оборудования!");
+                });
+              },
+              function() {
+                alertify.error("Оформление аренды оборудования отменено!");
               }).set("labels", {ok: "Да", cancel: "Отмена"});
               } else {
                 alertify.error("Вы не выполнили авторизацию!");

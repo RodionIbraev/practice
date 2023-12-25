@@ -153,7 +153,7 @@ class Agreement(SoftDeleteModel):
                                          on_delete=models.DO_NOTHING, null=True, blank=True)
     combo_tariff_plan = models.ForeignKey(ComboTariffPlan, verbose_name="Комбо-тариф",
                                           on_delete=models.DO_NOTHING, null=True, blank=True)
-    optional_equipment = models.ForeignKey(OptionalEquipment, verbose_name="Комбо-тариф",
+    optional_equipment = models.ForeignKey(OptionalEquipment, verbose_name="Доп. оборудование",
                                            on_delete=models.DO_NOTHING, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата заключения договора")
 
