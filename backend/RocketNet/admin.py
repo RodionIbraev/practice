@@ -7,7 +7,9 @@ from .models import MobileTariffPlan, User, HomeTariffPlan, ComboTariffPlan, Agr
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ("is_staff",)
+    fields = ["is_superuser", "first_name", "last_name", "is_staff", "is_active",
+              "date_joined", "is_deleted", "deleted_at", "phone_number"]
 
 
 @admin.register(MobileTariffPlan)
@@ -18,6 +20,7 @@ class MobileTariffPlanAdmin(admin.ModelAdmin):
 @admin.register(HomeTariffPlan)
 class HomeTariffPlanAdmin(admin.ModelAdmin):
     search_fields = ("name",)
+    list_filter = ("price",)
 
 
 @admin.register(ComboTariffPlan)
@@ -43,7 +46,7 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(OptionalEquipment)
 class OptionalEquipmentAdmin(admin.ModelAdmin):
-    pass
+    list_filter = ("price",)
 
 
 admin.site.site_header = "Администрирование RocketNet"
