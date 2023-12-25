@@ -84,7 +84,7 @@
             </div>
         </div>
 
-        <p style="text-align: center;" id="tarif">Найдите идеальный тарифный план для себя</p>
+        <p style="text-align: center;" id="tarif">Ознакомьтесь с нашими услугами</p>
         <div class="tarif-icons">
             <div class="icon-box" id="btn-phone" tabindex="0">   
                 <i class="ri-phone-line"></i>
@@ -96,9 +96,12 @@
                 <i class="ri-phone-line"></i>
                 <i class="ri-home-3-line"></i>
             </div>
+            <div class="icon-box" id="btn-dop" tabindex="0">
+                <i class="ri-router-line"></i>
+            </div>
         </div>
 
-        <div class="tarif phone" id="phone">
+        <div class="tarif" id="phone" style="display: none;">
             <p>Мобильные тарифы</p>
             {% for mobile_tariff_plan in mobile_tariff_plans %}
             <div class="tarifs" data-id="mobile_tariff_plan_{{mobile_tariff_plan.id}}">
@@ -116,7 +119,7 @@
             {% endfor %}
         </div>
 
-        <div class="tarif home" id="home" style="display: none;">
+        <div class="tarif" id="home" style="display: none;">
             <p>Домашние тарифы</p>
             {% for home_tariff_plan in home_tariff_plans %}
             <div class="tarifs" data-id="home_tariff_plan_{{home_tariff_plan.id}}">
@@ -133,7 +136,7 @@
             {% endfor %}
         </div>
 
-        <div class="tarif combo" id="combo" style="display: none;">
+        <div class="tarif" id="combo" style="display: none;">
             <p>Комбо-тарифы</p>
             {% for combo_tariff_plan in combo_tariff_plans %}
             <div class="tarifs" data-id="combo_tariff_plan_{{combo_tariff_plan.id}}">
@@ -156,6 +159,22 @@
                     </div>
                 </div>
                 <button type="submit" id="oform_combo_tariff_plan" class="oform">Оформить</button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="tarif" id="dop" style="display: none;">
+            <p>Аренда дополнительного оборудования</p>
+            {% for optional_equipment in optional_equipments %}
+            <div class="tarifs" data-id="{{optional_equipment.id}}">
+                <div class="name-cost">
+                    <h4 style="width: 700px;">{{ optional_equipment.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ optional_equipment.price }} &#8381;/мес</h5>
+                </div>
+                <div class="descriprion">
+                    <h5>{{ optional_equipment.description }}</h5>
+                </div>
+                <button type="submit" id="oform_optional_equipment" class="oform">Оформить</button>
             </div>
             {% endfor %}
         </div>
@@ -224,7 +243,7 @@
         <p>&copy; 2023 «RocketNet» Все права защищены</p>
     </footer>
 
-    <script src="static/js/main.js"></script>
+    <script src="/static/js/main.js"></script>
     <script type="text/javascript">
         function togglePopupLogout() {
             $.ajax({

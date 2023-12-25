@@ -352,7 +352,7 @@ footer {
 
 .name-cost {
     display: flex;
-    align-items:end;
+    align-items:first baseline;
     gap: 20px;
 }
 
@@ -522,6 +522,7 @@ h6 {
     scale: 110%;
 }
 
-.phone {
-    display: none;
+.descriprion {
+    margin-top: 20px;
+    width: 900px;
 }

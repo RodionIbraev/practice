@@ -13,27 +13,37 @@ function togglePopupLog() {
 var btn_phone = document.getElementById("btn-phone");
 var btn_home = document.getElementById("btn-home");
 var btn_combo = document.getElementById("btn-combo");
+var btn_dop = document.getElementById("btn-dop");
 var phone = document.getElementById("phone");
 var home = document.getElementById("home");
 var combo = document.getElementById("combo");
+var dop = document.getElementById("dop");
 
 btn_phone.addEventListener('click', ()=>{
     phone.style.display='block';
     home.style.display='none';
     combo.style.display='none';
+    dop.style.display='none';
 });
 
 btn_home.addEventListener('click', ()=>{
     home.style.display='block';
     phone.style.display='none';
     combo.style.display='none';
+    dop.style.display='none';
 })
 btn_combo.addEventListener('click', ()=>{
     combo.style.display='block';
     phone.style.display='none';
     home.style.display='none';
+    dop.style.display='none';
 });
-
+btn_dop.addEventListener('click', ()=>{
+  dop.style.display='block';
+  combo.style.display='none';
+  phone.style.display='none';
+  home.style.display='none';
+});
 
 
 // Ошибки регистрации пользователей

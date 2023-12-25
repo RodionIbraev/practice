@@ -88,6 +88,17 @@
             </div>
             {% endfor %}
             {% endif %}
+
+            {% if user_optional_equipments|length != 0 %}
+            <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Дополнительное оборудование:</p>
+            {% for user_optional_equipment in user_optional_equipments %}
+            <div class="tarifs-oform" data-id="{{user_optional_equipments.id}}">
+                    <h4>{{ user_optional_equipment.name }}</h4>
+                    <h5 style="color: var(--pink-color); font-weight: 700;">{{ user_optional_equipment.price }} &#8381;/мес</h5>
+                <button type="submit" id="neoform_optional_equipment" class="neoform">Отключить</button>
+            </div>
+            {% endfor %}
+            {% endif %}
         </section>
     </div>
 
