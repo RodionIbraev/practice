@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_201_CREATED
 from rest_framework.views import APIView
 
-from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan, Account
+from .models import User, Agreement, MobileTariffPlan, HomeTariffPlan, ComboTariffPlan, Account, OptionalEquipment
 from .serializers import UserSerializer, CreatePaymentSerializer
 
 from functools import wraps
@@ -96,7 +96,7 @@ class LoginView(APIView):
 
         payload = {
             "id": user.id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=120),
             "iat": datetime.datetime.utcnow()
         }
         token = jwt.encode(payload, "secret", algorithm="HS256")
@@ -126,9 +126,9 @@ class LogoutView(APIView):
         return response
 
 
-class TariffPlansDetailsView(APIView):
+class TariffAndEquipmentPlansDetailsView(APIView):
     """
-    Просмотр тарифов
+    Просмотр тарифов и оборудования
     """
     renderer_classes = [TemplateHTMLRenderer]
     template_name = "homePage.html"
@@ -139,11 +139,14 @@ class TariffPlansDetailsView(APIView):
         mobile_tariff_plans = [mobile_tariff_plan for mobile_tariff_plan in MobileTariffPlan.objects.all().values()]
         home_tariff_plans = [home_tariff_plans for home_tariff_plans in HomeTariffPlan.objects.all().values()]
         combo_tariff_plans = [combo_tariff_plans for combo_tariff_plans in ComboTariffPlan.objects.all().values()]
+        optional_equipments = [optional_equipments for optional_equipments in OptionalEquipment.objects.all().values()]
 
         response.data = {
             "mobile_tariff_plans": mobile_tariff_plans,
             "home_tariff_plans": home_tariff_plans,
             "combo_tariff_plans": combo_tariff_plans,
+            "optional_equipments": optional_equipments,
+            "token": None
         }
 
         token = request.COOKIES.get("jwt_token")
@@ -173,17 +176,56 @@ class AccountDetailsView(APIView):
         user_mobile_tariffs = []
         user_home_tariffs = []
         user_combo_tariffs = []
+        user_optional_equipments = []
         for agreement in user_agreements:
             mobile_tariff_id = agreement.get('mobile_tariff_plan_id')
             home_tariff_id = agreement.get('home_tariff_plan_id')
             combo_tariff_id = agreement.get('combo_tariff_plan_id')
+            optional_equipment_id = agreement.get('optional_equipment_id')
 
             if mobile_tariff_id is not None:
-                user_mobile_tariffs.append(MobileTariffPlan.objects.get(id=mobile_tariff_id))
+                try:
+                    mobile_tariff_plan = MobileTariffPlan.objects.get(id=mobile_tariff_id)
+                except MobileTariffPlan.DoesNotExist:
+                    try:
+                        mobile_tariff_plan = MobileTariffPlan.objects.filter(id=mobile_tariff_id, is_deleted=True).get()
+                    except MobileTariffPlan.DoesNotExist:
+                        mobile_tariff_plan = None
+                if mobile_tariff_plan is not None:
+                    user_mobile_tariffs.append(mobile_tariff_plan)
+
             if home_tariff_id is not None:
-                user_home_tariffs.append(HomeTariffPlan.objects.get(id=home_tariff_id))
+                try:
+                    home_tariff_plan = HomeTariffPlan.objects.get(id=home_tariff_id)
+                except MobileTariffPlan.DoesNotExist:
+                    try:
+                        home_tariff_plan = HomeTariffPlan.objects.filter(id=home_tariff_id, is_deleted=True).get()
+                    except MobileTariffPlan.DoesNotExist:
+                        home_tariff_plan = None
+                if home_tariff_plan is not None:
+                    user_home_tariffs.append(home_tariff_plan)
+
             if combo_tariff_id is not None:
-                user_combo_tariffs.append(ComboTariffPlan.objects.get(id=combo_tariff_id))
+                try:
+                    combo_tariff_plan = ComboTariffPlan.objects.get(id=combo_tariff_id)
+                except MobileTariffPlan.DoesNotExist:
+                    try:
+                        combo_tariff_plan = ComboTariffPlan.objects.filter(id=combo_tariff_id, is_deleted=True).get()
+                    except MobileTariffPlan.DoesNotExist:
+                        combo_tariff_plan = None
+                if combo_tariff_plan is not None:
+                    user_combo_tariffs.append(combo_tariff_plan)
+
+            if optional_equipment_id is not None:
+                try:
+                    optional_equipment = MobileTariffPlan.objects.get(id=mobile_tariff_id)
+                except MobileTariffPlan.DoesNotExist:
+                    try:
+                        optional_equipment = MobileTariffPlan.objects.filter(id=mobile_tariff_id, is_deleted=True).get()
+                    except MobileTariffPlan.DoesNotExist:
+                        optional_equipment = None
+                if optional_equipment is not None:
+                    user_optional_equipments.append(optional_equipment)
 
         response = Response()
         response.data = {
@@ -193,30 +235,17 @@ class AccountDetailsView(APIView):
             "user_mobile_tariffs": user_mobile_tariffs,
             "user_home_tariffs": user_home_tariffs,
             "user_combo_tariffs": user_combo_tariffs,
+            "user_optional_equipments": user_optional_equipments,
             "return_url": "https://" + os.getenv("NGROK_HOST") + "/accept-payment/"
         }
         return response
 
 
-class AgreementDeleteView(APIView):
-    @auth_required
-    def delete(self, request, tariff_type, tariff_id):
-        response = Response()
-        user = get_user(request)
-
-        user_agreement = Agreement.objects.filter(user=user, **{f"{tariff_type}_id": tariff_id}).first()
-        user_agreement.delete()
-        response.data = {
-            "success_message": "Тариф успешно отключен!",
-        }
-        return response
-
-
-class AgreementRegistrationView(APIView):
+class AgreementTariffRegistrationView(APIView):
     @auth_required
     def post(self, request, tariff_type, tariff_id):
         """
-        Оформление договора пользователем
+        Оформление договора на тариф пользователем
         """
         response = Response()
         user = get_user(request)
@@ -244,6 +273,63 @@ class AgreementRegistrationView(APIView):
                 "error": "На вашем счете недостаточно средств. Пополните лицевой счёт!",
             }
 
+        return response
+
+
+class AgreementEquipmentRegistrationView(APIView):
+    @auth_required
+    def post(self, request, equipment_id):
+        """
+        Оформление договора на оборудование пользователем
+        """
+        response = Response()
+        user = get_user(request)
+        user_account = user.account
+        user_balance = user_account.balance
+
+        equipment = OptionalEquipment.objects.get(id=equipment_id)
+
+        if user_balance - equipment.price >= 0:
+            user_account.balance -= equipment.price
+            user_account.save(update_fields=["balance"])
+            new_agreement = Agreement.objects.create(user=user, **{f"optional_equipment_id": equipment_id})
+            response.data = {
+                "new_agreement": model_to_dict(new_agreement),
+                "created_at": new_agreement.created_at
+            }
+        else:
+            response.data = {
+                "error": "На вашем счете недостаточно средств. Пополните лицевой счёт!",
+            }
+
+        return response
+
+
+class AgreementTariffDeleteView(APIView):
+    @auth_required
+    def delete(self, request, tariff_type, tariff_id):
+        response = Response()
+        user = get_user(request)
+
+        user_agreement = Agreement.objects.filter(user=user, **{f"{tariff_type}_id": tariff_id}).first()
+        user_agreement.delete()
+        response.data = {
+            "success_message": "Тариф успешно отключен!",
+        }
+        return response
+
+
+class AgreementEquipmentDeleteView(APIView):
+    @auth_required
+    def delete(self, request, equipment_id):
+        response = Response()
+        user = get_user(request)
+
+        user_agreement = Agreement.objects.filter(user=user, **{f"equipment_id": equipment_id}).first()
+        user_agreement.delete()
+        response.data = {
+            "success_message": "Обородувание успешно отключено!",
+        }
         return response
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models import ImageField
 from django_softdelete.models import SoftDeleteModel
 
 from .utils import add_change_balance_method, OperationType
@@ -130,6 +131,20 @@ class ComboTariffPlan(SoftDeleteModel):
         ordering = ("-price",)
 
 
+class OptionalEquipment(SoftDeleteModel):
+    name = models.CharField(max_length=128, verbose_name="Название")
+    description = models.CharField(max_length=228, verbose_name="Описание")
+    price = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="Стоимость")
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name = "Доп. оборудование"
+        verbose_name_plural = "Доп. оборудование"
+        ordering = ("name",)
+
+
 class Agreement(SoftDeleteModel):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
     mobile_tariff_plan = models.ForeignKey(MobileTariffPlan, verbose_name="Мобильный тариф",
@@ -138,6 +153,8 @@ class Agreement(SoftDeleteModel):
                                          on_delete=models.DO_NOTHING, null=True, blank=True)
     combo_tariff_plan = models.ForeignKey(ComboTariffPlan, verbose_name="Комбо-тариф",
                                           on_delete=models.DO_NOTHING, null=True, blank=True)
+    optional_equipment = models.ForeignKey(OptionalEquipment, verbose_name="Комбо-тариф",
+                                           on_delete=models.DO_NOTHING, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True, verbose_name="Дата заключения договора")
 
     def __str__(self):

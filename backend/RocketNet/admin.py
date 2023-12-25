@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-from .models import MobileTariffPlan, User, HomeTariffPlan, ComboTariffPlan, Agreement, Account, BalanceChange
+from .models import MobileTariffPlan, User, HomeTariffPlan, ComboTariffPlan, Agreement, Account, BalanceChange, \
+    OptionalEquipment
 
 
 @admin.register(User)
@@ -37,6 +38,11 @@ class BalanceChangeAdmin(admin.ModelAdmin):
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(OptionalEquipment)
+class OptionalEquipmentAdmin(admin.ModelAdmin):
     pass
 
 

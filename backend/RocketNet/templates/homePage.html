@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -287,7 +288,7 @@
             let tariffType = tariffIdAndType.slice(0, -2);
             alertify.confirm("Подтверждение оформления тарифа", "Вы уверены, что хотите оформить данный тариф?",
               function() {
-                $.post("/agreement-registration/" + tariffType + "/" + tariffId, function(response) {
+                $.post("/agreement-tariff-registration/" + tariffType + "/" + tariffId, function(response) {
                   if (response.error){
                     alertify.alert("Ошибка оплаты", response.error);
                   }

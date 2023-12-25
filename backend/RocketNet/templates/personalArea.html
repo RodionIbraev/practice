@@ -37,6 +37,7 @@
 
         <section class="purchases">
             <p>Оформленные тарифы</p>
+            {% if user_mobile_tariffs|length != 0 %}
             <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Мобильные тарифы:</p>
             {% for user_mobile_tariffs in user_mobile_tariffs %}
             <div class="tarifs-oform" data-id="mobile_tariff_plan_{{user_mobile_tariffs.id}}">
@@ -50,7 +51,9 @@
                 <button type="submit" id="neoform_mobile_tariff_plan" class="neoform">Отключить</button>
             </div>
             {% endfor %}
+            {% endif %}
 
+            {% if user_home_tariffs|length != 0 %}
             <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Домашние тарифы:</p>
             {% for user_home_tariffs in user_home_tariffs %}
             <div class="tarifs-oform" data-id="home_tariff_plan_{{user_home_tariffs.id}}">
@@ -63,7 +66,9 @@
                 <button type="submit" id="neoform_home_tariff_plan" class="neoform">Отключить</button>
             </div>
             {% endfor %}
+            {% endif %}
 
+            {% if user_combo_tariffs|length != 0 %}
             <p style="margin-top: 20px; text-align: left; font-size: 32px; padding-left: 30px;">Комбо-тарифы:</p>
             {% for user_combo_tariffs in user_combo_tariffs %}
             <div class="tarifs-oform" data-id="combo_tariff_plan_{{user_combo_tariffs.id}}">
@@ -82,6 +87,7 @@
                 <button type="submit" id="neoform_combo_tariff_plan" class="neoform">Отключить</button>
             </div>
             {% endfor %}
+            {% endif %}
         </section>
     </div>
 
@@ -148,11 +154,12 @@
             let tariffType = tariffIdAndType.slice(0, -2);
             console.log(tariffId);
 
-            alertify.confirm("Подтверждение отключения тарифа", "Вы уверены, что хотите отключить данный тариф?")
+            alertify.confirm("Вы уверены, что хотите отключить данный тариф?")
+              .setHeader("Подтверждение отключения тарифа")
               .set("labels", { ok: "Да", cancel: "Отмена" })
               .set("onok", function() {
                 $.ajax({
-                  url: "/agreement-delete/" + tariffType + "/" + tariffId,
+                  url: "/agreement-tariff-delete/" + tariffType + "/" + tariffId,
                   type: "DELETE",
                   success: function(response) {
                     alertify.success(response.success_message);
