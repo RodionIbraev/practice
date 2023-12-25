@@ -71,7 +71,7 @@ class BalanceChange(models.Model):
 
     def __str__(self) -> str:
         return (
-            f"Баланс пользователя:  {self.account} "
+            f"{self.account} "
             f"Время создания: {self.created_date}"
             f"Количество: {self.amount}"
         )
